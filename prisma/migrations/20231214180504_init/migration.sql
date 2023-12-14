@@ -33,40 +33,11 @@ CREATE TABLE "Role" (
     CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "Store" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT,
-    "city" TEXT,
-    "street" TEXT,
-    "district" TEXT,
-    "houseNumber" TEXT,
-    "postalCode" TEXT,
-    "logo" TEXT,
-    "phoneNumber" TEXT,
-    "whatsApp" TEXT,
-    "email" TEXT,
-    "instagram" TEXT,
-    "userId" TEXT NOT NULL,
-
-    CONSTRAINT "Store_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_phoneNumber_key" ON "User"("phoneNumber");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Store_phoneNumber_key" ON "Store"("phoneNumber");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Store_email_key" ON "Store"("email");
-
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Store" ADD CONSTRAINT "Store_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

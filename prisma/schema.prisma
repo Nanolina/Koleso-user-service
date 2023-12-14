@@ -20,7 +20,6 @@ model User {
   roleId      Int
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @default(now())
-  store       Store[]
   role        Role               @relation(fields: [roleId], references: [id])
 }
 
@@ -28,24 +27,6 @@ model Role {
   id    Int            @id @default(autoincrement())
   name  user_role_enum @default(user)
   users User[]
-}
-
-model Store {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
-  city        String?
-  street      String?
-  district    String?
-  houseNumber String?
-  postalCode  String?
-  logo        String?
-  phoneNumber String? @unique
-  whatsApp    String?
-  email       String? @unique
-  instagram   String?
-  userId      String
-  user        User    @relation(fields: [userId], references: [id])
 }
 
 enum user_gender_enum {
