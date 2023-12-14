@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id          Int                @id(map: "PK_cace4a159ff9f2512dd42373760") @default(autoincrement())
+  email       String             @unique(map: "UQ_e12875dfb3b1d92d7d7c5377e22") @db.VarChar(255)
+  password    String
+  name        String?            @db.VarChar(255)
+  phoneNumber String             @db.VarChar(20)
+  gender      user_gender_enum?
+  birthDate   DateTime?          @db.Date
+  language    user_language_enum @default(English)
+  isActive    Boolean            @default(false)
+  createdAt   DateTime           @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime           @default(now()) @db.Timestamp(6)
+}
+
+enum user_gender_enum {
+  male
+  female
+}
+
+enum user_language_enum {
+  English
+  Russian
+}
