@@ -45,7 +45,6 @@ CREATE TABLE "Address" (
     "postalCode" TEXT,
     "additionalInfo" TEXT,
     "userId" TEXT,
-    "storeId" TEXT,
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
 );

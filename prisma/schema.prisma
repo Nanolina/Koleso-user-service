@@ -41,7 +41,6 @@ model Address {
   postalCode     String?
   additionalInfo String?
   userId         String?
-  storeId        String?
   user           User?   @relation(fields: [userId], references: [id])
 }
 
