@@ -8,38 +8,54 @@ datasource db {
 }
 
 model User {
-  id          String             @id @default(uuid())
-  email       String             @unique
+  id          String       @id @default(uuid())
+  email       String       @unique
   password    String
-  name        String?            @db.VarChar(255)
-  phoneNumber String             @unique @db.VarChar(20)
-  gender      user_gender_enum?
-  birthDate   DateTime?          @db.Date
-  language    user_language_enum @default(English)
-  isActive    Boolean            @default(false)
+  name        String?      @db.VarChar(255)
+  phoneNumber String       @unique @db.VarChar(20)
+  gender      GenderType?
+  birthDate   DateTime?    @db.Date
+  language    LanguageType @default(English)
+  isActive    Boolean      @default(false)
   roleId      Int
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @default(now())
-  role        Role               @relation(fields: [roleId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
+  addresses   Address[]
+  role        Role         @relation(fields: [roleId], references: [id])
 }
 
 model Role {
-  id    Int            @id @default(autoincrement())
-  name  user_role_enum @default(user)
+  id    Int      @id @default(autoincrement())
+  name  RoleType @default(User)
   users User[]
 }
 
-enum user_gender_enum {
-  male
-  female
+model Address {
+  id             String  @id @default(uuid())
+  country        String
+  region         String?
+  city           String
+  street         String
+  houseNumber    String
+  apartment      String?
+  postalCode     String?
+  additionalInfo String?
+  userId         String?
+  storeId        String?
+  user           User?   @relation(fields: [userId], references: [id])
 }
 
-enum user_language_enum {
+enum GenderType {
+  Male
+  Female
+}
+
+enum LanguageType {
   English
   Russian
 }
 
-enum user_role_enum {
-  user
-  seller
+enum RoleType {
+  User
+  Seller
 }
