@@ -8,20 +8,14 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  email       String       @unique
-  password    String
-  name        String?      @db.VarChar(255)
-  phoneNumber String       @unique @db.VarChar(20)
-  gender      GenderType?
-  birthDate   DateTime?    @db.Date
-  language    LanguageType @default(English)
-  isActive    Boolean      @default(false)
-  roleId      Int
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now())
-  addresses   Address[]
-  role        Role         @relation(fields: [roleId], references: [id])
+  id        String       @id @default(uuid())
+  name      String?      @db.VarChar(255)
+  gender    GenderType?
+  birthDate DateTime?    @db.Date
+  language  LanguageType @default(English)
+  roleId    Int
+  addresses Address[]
+  role      Role         @relation(fields: [roleId], references: [id])
 }
 
 model Role {

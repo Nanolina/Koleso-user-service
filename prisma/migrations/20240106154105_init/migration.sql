@@ -10,17 +10,11 @@ CREATE TYPE "RoleType" AS ENUM ('User', 'Seller');
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
     "name" VARCHAR(255),
-    "phoneNumber" VARCHAR(20) NOT NULL,
     "gender" "GenderType",
     "birthDate" DATE,
     "language" "LanguageType" NOT NULL DEFAULT 'English',
-    "isActive" BOOLEAN NOT NULL DEFAULT false,
     "roleId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -48,12 +42,6 @@ CREATE TABLE "Address" (
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_phoneNumber_key" ON "User"("phoneNumber");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
