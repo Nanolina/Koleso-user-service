@@ -14,15 +14,7 @@ model User {
   gender    GenderType?
   birthDate DateTime?    @db.Date
   language  LanguageType @default(English)
-  roleId    Int
   addresses Address[]
-  role      Role         @relation(fields: [roleId], references: [id])
-}
-
-model Role {
-  id    Int      @id @default(autoincrement())
-  name  RoleType @default(User)
-  users User[]
 }
 
 model Address {
@@ -47,9 +39,4 @@ enum GenderType {
 enum LanguageType {
   English
   Russian
-}
-
-enum RoleType {
-  User
-  Seller
 }
