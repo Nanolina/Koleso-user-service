@@ -35,11 +35,6 @@ export class UserService {
     });
 
     if (!user) {
-      this.logger.error({
-        method: 'user-findOne',
-        error: 'User not found',
-      });
-
       throw new NotFoundException('User not found');
     }
 
@@ -64,7 +59,6 @@ export class UserService {
       };
     } catch (error) {
       this.logger.error({ method: 'user-changeLanguage', error });
-
       throw new InternalServerErrorException(UNKNOWN_ERROR_TRY);
     }
   }
