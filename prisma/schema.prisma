@@ -18,16 +18,16 @@ model Organization {
 }
 
 model User {
-  id             String       @id @default(uuid())
-  name           String?      @db.VarChar(255)
-  surname        String?      @db.VarChar(255)
-  patronymic     String?      @db.VarChar(255)
+  id             String        @id @default(uuid())
+  name           String?       @db.VarChar(255)
+  surname        String?       @db.VarChar(255)
+  patronymic     String?       @db.VarChar(255)
   gender         GenderType?
-  birthDate      DateTime?    @db.Date
-  language       LanguageType @default(English)
-  organizationId String
+  birthDate      DateTime?     @db.Date
+  language       LanguageType  @default(English)
+  organizationId String?
   addresses      Address[]
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  organization   Organization? @relation(fields: [organizationId], references: [id])
 }
 
 model Document {
