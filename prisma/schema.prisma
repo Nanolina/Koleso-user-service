@@ -8,13 +8,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Organization {
+  id        String     @id @default(uuid())
+  name      String
+  founderId String
+  TIN       String?
+  documents Document[]
+  users     User[]
+}
+
 model User {
-  id        String       @id @default(uuid())
-  name      String?      @db.VarChar(255)
-  gender    GenderType?
-  birthDate DateTime?    @db.Date
-  language  LanguageType @default(English)
-  addresses Address[]
+  id             String       @id @default(uuid())
+  name           String?      @db.VarChar(255)
+  surname        String?      @db.VarChar(255)
+  patronymic     String?      @db.VarChar(255)
+  gender         GenderType?
+  birthDate      DateTime?    @db.Date
+  language       LanguageType @default(English)
+  organizationId String
+  addresses      Address[]
+  organization   Organization @relation(fields: [organizationId], references: [id])
+}
+
+model Document {
+  id             String       @id @default(uuid())
+  type           DocumentType
+  url            String
+  publicId       String?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
 }
 
 model Address {
@@ -29,6 +51,15 @@ model Address {
   additionalInfo String?
   userId         String?
   user           User?   @relation(fields: [userId], references: [id])
+}
+
+enum DocumentType {
+  Passport
+  CertificateOfRegistration
+  CertificateOfDirectorsAndSecretary
+  CertificateOfRegisteredOffice
+  CertificateOfShareholders
+  CertificateTaxResidency
 }
 
 enum GenderType {
