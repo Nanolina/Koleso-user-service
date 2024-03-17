@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
@@ -18,6 +19,11 @@ import { OrganizationService } from './organization.service';
 @Controller('organization')
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
+
+  @Get(':id')
+  findOne(@Param('id') id: string, @Req() req: Request) {
+    return this.organizationService.findOne(id, req.user.id);
+  }
 
   @Post()
   @UseInterceptors(AnyFilesInterceptor())

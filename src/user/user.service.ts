@@ -23,7 +23,7 @@ export class UserService {
         },
       });
     } catch (error) {
-      this.logger.error({ method: 'create', error });
+      this.logger.error({ method: 'user-create', error });
     }
   }
 
@@ -40,6 +40,7 @@ export class UserService {
 
     return {
       language: user.language,
+      organizationId: user.organizationId,
     };
   }
 

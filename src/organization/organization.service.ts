@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentType } from '@prisma/client';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { MyLogger } from '../logger/my-logger.service';
@@ -14,6 +14,73 @@ export class OrganizationService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
+  private transformDocuments(documents) {
+    return documents.reduce((acc, doc) => {
+      acc[doc.type] = doc.url;
+      return acc;
+    }, {});
+  }
+
+  private getResponse(organization) {
+    return {
+      documents: this.transformDocuments(organization.documents),
+      id: organization.id,
+      name: organization.name,
+      TIN: organization.TIN,
+      founderId: organization.founderId,
+    };
+  }
+
+  private async uploadDocument(
+    file: Express.Multer.File,
+    organizationId: string,
+  ) {
+    const documentType: DocumentType | null = changeToDocumentType(
+      file.fieldname,
+    );
+    try {
+      const documentFromCloudinary =
+        await this.cloudinaryService.uploadDocument(file);
+      return this.prisma.document.create({
+        data: {
+          organizationId,
+          type: documentType,
+          url: documentFromCloudinary?.url,
+          publicId: documentFromCloudinary?.public_id,
+        },
+      });
+    } catch (error) {
+      this.logger.error({ method: 'organization-document-upload', error });
+    }
+  }
+
+  async findOne(id: string, userId: string) {
+    const organization = await this.prisma.organization.findUnique({
+      where: {
+        id,
+        users: {
+          some: {
+            id: userId,
+          },
+        },
+      },
+      include: {
+        documents: {
+          select: {
+            type: true,
+            url: true,
+          },
+        },
+      },
+    });
+
+    if (!organization) {
+      throw new NotFoundException('Organization not found');
+    }
+
+    return this.getResponse(organization);
+  }
+
   async create(
     dto: CreateOrganizationDto,
     userId: string,
@@ -24,34 +91,17 @@ export class OrganizationService {
         name: dto.name,
         founderId: userId,
         TIN: dto.TIN,
+        users: {
+          connect: {
+            id: userId,
+          },
+        },
       },
     });
 
     const uploadPromises = files.map((file) =>
-      (async () => {
-        const documentType: DocumentType | null = changeToDocumentType(
-          file.fieldname,
-        );
-
-        try {
-          const documentFromCloudinary =
-            await this.cloudinaryService.uploadDocument(file);
-          return this.prisma.document.create({
-            data: {
-              organizationId: organization.id,
-              type: documentType,
-              url: documentFromCloudinary?.url,
-              publicId: documentFromCloudinary?.public_id,
-            },
-          });
-        } catch (error) {
-          this.logger.error({ method: 'document-upload', error });
-          return null; // Return null to handle the rejection softly
-        }
-      })(),
+      this.uploadDocument(file, organization.id),
     );
-
-    // Wait for all documents to be uploaded
     await Promise.all(uploadPromises);
 
     const createdOrganization = await this.prisma.organization.findUnique({
@@ -69,18 +119,6 @@ export class OrganizationService {
       },
     });
 
-    // Transform documents to the desired format
-    const documents = createdOrganization.documents.reduce(
-      (acc, doc) => ({ ...acc, [doc.type]: doc.url }),
-      {},
-    );
-
-    return {
-      documents,
-      id: createdOrganization.id,
-      name: createdOrganization.name,
-      TIN: createdOrganization.TIN,
-      founderId: createdOrganization.founderId,
-    };
+    return this.getResponse(createdOrganization);
   }
 }
