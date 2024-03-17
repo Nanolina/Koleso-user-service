@@ -7,7 +7,10 @@ import {
   Patch,
   Post,
   Req,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { CreateOrganizationDto } from './dto';
 import { OrganizationService } from './organization.service';
@@ -17,16 +20,14 @@ export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
   @Post()
-  // @UseInterceptors(FileInterceptor('image', imageUploadOptions))
+  @UseInterceptors(AnyFilesInterceptor())
   @HttpCode(HttpStatus.CREATED)
   create(
     @Body() dto: CreateOrganizationDto,
-    // @UploadedFile() image: Express.Multer.File,
+    @UploadedFiles() files: Array<Express.Multer.File>,
     @Req() req: Request,
   ) {
-    console.log('dto', dto);
-    console.log('req', req.user.id);
-    // return this.organizationService.create(createStoreDto, req.user.id, image);
+    return this.organizationService.create(dto, req.user.id, files);
   }
 
   @Patch(':id')

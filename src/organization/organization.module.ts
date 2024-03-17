@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
-import { OrganizationService } from './organization.service';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
+import { LoggerModule } from '../logger/logger.module';
+import { PrismaService } from '../prisma/prisma.service';
 import { OrganizationController } from './organization.controller';
+import { OrganizationService } from './organization.service';
 
 @Module({
+  imports: [LoggerModule, CloudinaryModule],
   controllers: [OrganizationController],
-  providers: [OrganizationService],
+  providers: [OrganizationService, PrismaService],
 })
 export class OrganizationModule {}
