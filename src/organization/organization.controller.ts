@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import { CreateOrganizationDto } from './dto';
+import { CreateOrganizationDto, UpdateOrganizationDto } from './dto';
 import { OrganizationService } from './organization.service';
 
 @Controller('organization')
@@ -37,18 +37,13 @@ export class OrganizationController {
   }
 
   @Patch(':id')
-  // @UseInterceptors(FileInterceptor('image', imageUploadOptions))
+  @UseInterceptors(AnyFilesInterceptor())
   update(
+    @Body() dto: UpdateOrganizationDto,
     @Param('id') id: string,
-    // @UploadedFile() image: Express.Multer.File,
+    @UploadedFiles() files: Array<Express.Multer.File>,
     @Req() req: Request,
   ) {
-    console.log('req', req.user.id);
-    // return this.organizationService.update(
-    //   updateStoreDto,
-    //   id,
-    //   req.user.id,
-    //   image,
-    // );
+    return this.organizationService.update(id, dto, req.user.id, files);
   }
 }

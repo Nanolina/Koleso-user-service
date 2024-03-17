@@ -12,7 +12,7 @@ export class CloudinaryService {
         const upload = v2.uploader.upload_stream(
           {
             folder: 'documents',
-            resource_type: 'auto',
+            resource_type: 'raw',
           },
           (error, result) => {
             if (error) return reject(error);
@@ -29,10 +29,14 @@ export class CloudinaryService {
     publicId: string,
   ): Promise<UploadApiErrorResponse | UploadApiResponse> {
     return new Promise((resolve, reject) => {
-      v2.uploader.destroy(publicId, (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
-      });
+      v2.uploader.destroy(
+        publicId,
+        { resource_type: 'raw' },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        },
+      );
     });
   }
 }
