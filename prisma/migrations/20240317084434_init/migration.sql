@@ -13,6 +13,7 @@ CREATE TABLE "Organization" (
     "name" TEXT NOT NULL,
     "founderId" TEXT NOT NULL,
     "TIN" TEXT,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Organization_pkey" PRIMARY KEY ("id")
 );
@@ -37,6 +38,7 @@ CREATE TABLE "Document" (
     "type" "DocumentType" NOT NULL,
     "url" TEXT NOT NULL,
     "publicId" TEXT,
+    "isChecked" BOOLEAN NOT NULL DEFAULT false,
     "organizationId" TEXT NOT NULL,
 
     CONSTRAINT "Document_pkey" PRIMARY KEY ("id")
