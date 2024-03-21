@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class UpdateOrganizationDto {
   @IsString()
@@ -10,26 +10,26 @@ export class UpdateOrganizationDto {
   TIN?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUrl()
   Passport?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUrl()
   CertificateOfRegistration?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUrl()
   CertificateOfDirectorsAndSecretary?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUrl()
   CertificateOfRegisteredOffice?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUrl()
   CertificateOfShareholders?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUrl()
   CertificateTaxResidency?: string;
 }

@@ -9,11 +9,13 @@ import {
   Post,
   Req,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { CreateOrganizationDto, UpdateOrganizationDto } from './dto';
+import { IsFounderGuard } from './guards';
 import { OrganizationService } from './organization.service';
 
 @Controller('organization')
@@ -38,6 +40,7 @@ export class OrganizationController {
 
   @Patch(':id')
   @UseInterceptors(AnyFilesInterceptor())
+  @UseGuards(IsFounderGuard)
   update(
     @Body() dto: UpdateOrganizationDto,
     @Param('id') id: string,
