@@ -13,7 +13,6 @@ CREATE TABLE "Organization" (
     "name" TEXT NOT NULL,
     "founderId" TEXT NOT NULL,
     "TIN" TEXT,
-    "isActive" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Organization_pkey" PRIMARY KEY ("id")
 );

@@ -13,7 +13,6 @@ model Organization {
   name      String
   founderId String
   TIN       String?
-  isActive  Boolean    @default(true)
   documents Document[]
   users     User[]
 }
