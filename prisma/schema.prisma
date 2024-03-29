@@ -11,7 +11,7 @@ datasource db {
 model Organization {
   id        String     @id @default(uuid())
   name      String
-  founderId String
+  founderId String     @unique
   TIN       String?
   documents Document[]
   users     User[]
