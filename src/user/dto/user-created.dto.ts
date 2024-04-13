@@ -4,9 +4,7 @@ import {
   IsOptional,
   IsString,
   IsUUID,
-  Validate,
 } from 'class-validator';
-import { IsValidVerificationCodeConstraint } from '../validators';
 
 export class UserCreatedDto {
   @IsOptional()
@@ -20,6 +18,8 @@ export class UserCreatedDto {
   email: string;
 
   @IsDefined()
-  @Validate(IsValidVerificationCodeConstraint)
-  verificationCodeEmail: number;
+  code: number;
+
+  @IsDefined()
+  codeType: string;
 }
